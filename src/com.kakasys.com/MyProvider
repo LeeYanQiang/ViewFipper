@@ -1,0 +1,55 @@
+package com.kakasys.viewfipperdemo;
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.AvoidXfermode.Mode;
+import android.net.Uri;
+
+public class MyProvider extends ContentProvider{
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		return 0;
+	}
+
+	@Override
+	public String getType(Uri uri) {
+		return null;
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		return null;
+	}
+	/**
+	 * 初始化一个数据库
+	 */
+	@Override
+	public boolean onCreate() {
+		SQLiteDatabase db=this.getContext().openOrCreateDatabase("test_db.db2", Context.MODE_PRIVATE, null);
+		db.execSQL("create table tab(_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+		ContentValues values=new ContentValues();
+		values.put("name", "test");
+		db.insert("tab", "_id", values);
+		db.close();
+		return false;
+	}
+	/**
+	 * 实现query()方法
+	 */
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+		SQLiteDatabase db=this.getContext().openOrCreateDatabase("test_db.db2", Context.MODE_PRIVATE, null);
+		Cursor cursor=db.query("tab", null, null, null, null, null, null);
+		return cursor;
+	}
+
+	@Override
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		return 0;
+	}
+
+}
